@@ -1,0 +1,31 @@
+{% extends "Billboard_app/model.html" %}
+    {% load static %}
+    {% block header %}
+        <script src="{% static "js/register.js" %}" type="text/javascript"></script>
+    {% endblock %}
+    {% block content %}
+        <div>
+            <h1>Create an account</h1>
+        </div>
+        <div>
+            <form id="user-form" method='POST'>
+            {% csrf_token %}
+                <div class="box">
+                    <label for="user">Username: </label>
+                    <input name="user" type="text" id="Username" class="user-input" placeholder="Enter username">
+                </div>
+                <div class="box">
+                    <label for="pass">Password: </label>
+                    <input name="pass" type="password" id="Password" class="user-input" placeholder="Enter password">
+                </div>
+                <div class="box">
+                    <label for="retype">Password confirmation: </label>
+                    <input name="retype" type="password" id="confirm_password" class="user-input" placeholder="Reenter password">
+                    <span id="message"></span>
+                </div>
+                <div>
+                    <input type="submit" value="Create the account" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    {% endblock %}
