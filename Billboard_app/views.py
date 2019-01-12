@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login, logout
+
 
 
 # Create your views here.
@@ -16,33 +18,27 @@ def login(request):
 
 
 def register(request):
-    return render(request, "Register/register.html")
+    if request.method == "POST":
+        user = UserCreationForm(request.POST)
+        if user.is_valid():
+            return HttpResponseRedirect('')
+    else:
+        return render(request, "Register/register.html")
 
 
 def home(request):
-    collect_bb = Messages.objects.all()
-    for element in collect_bb:
-        print(element.title)
-        print(element.content)
-        print(element.author)
-        print(element.date)
-        print(len(collect_bb))
-    return render(request, "Billboard_app/home.html", context={'Billboards': collect_bb, 'size': len(collect_bb)})
+    return render(request, "Billboard_app/home.html", {"posts": get_recent_posts(), "form": BillboardForm()})
 
 
 @csrf_exempt
 def add_bb(request):
-    if request.is_ajax():
-        resp = {'status': 'success'}
-        print(request.POST.get('title'))
-        print(request.POST.get('content'))
-        print(request.POST.get('author'))
-        msg = Messages(title=request.POST.get('title'), content=request.POST.get('content'),
-                       author=request.POST.get('author'))
-        msg.save()
+    if request.method == "POST":
+        user = UserCreationForm(request.POST)
+        if user.is_valid():
+            user.save()
+            return HttpResponseRedirect('/billboard/')
     else:
-        resp = {'status': 'error'}
-    return HttpResponse(resp)
+        return render(request, 'registration/register.html', {"form": UserCreationForm()})
 
 
 
